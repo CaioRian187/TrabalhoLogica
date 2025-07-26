@@ -60,7 +60,7 @@ A proposição de cima significa (-p V q)
 g.add_clause([-2, 3])
 A proposição de cima significa (-q V r)
 
-
+Exibindo o solver
 print(g.solve())
 print(g.get_model())
 '''
