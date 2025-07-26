@@ -1,7 +1,9 @@
 from pysat.solvers import Glucose3
 
 
-'''g = Glucose3()
+'''
+Teste do solver da video aula do thiago
+g = Glucose3()
 g.add_clause([-1, 2])
 g.add_clause([-2, 3])
 print(g.solve())
