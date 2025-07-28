@@ -63,4 +63,5 @@ A proposição de cima significa (-q V r)
 Exibindo o solver
 print(g.solve())
 print(g.get_model())
+Acessado pelo vsCode
 '''
