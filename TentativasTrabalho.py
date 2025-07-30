@@ -30,6 +30,35 @@ def get_acao(passo, acao):
         proposicoes[aux] = valor_proposicao_inicial
         valor_proposicao_inicial += 1
         return proposicoes[aux]
+
+def mostrar_puzzle(puzzle):
+    print("-"*13)
+    for l in range(3):
+        for c in range(3):
+            display_value = 0 if puzzle[l][c] == 0 else puzzle[l][c]
+            print(f"{display_value:2}", end="  ")
+        print("\n"+"-"*13)
+
+if __name__ == "__main__":
+    passos_maximos = 20
+
+    puzzle_inicial = [
+        [3,2,1],
+        [4,6,5],
+        [8,7,0]
+    ]
+    print("estado inicial do puzzle")
+    mostrar_puzzle(puzzle_inicial)
+
+    solucao_encontrada = False
+    for i in range(1, passos_maximos + 1):
+        print("\n"+"="*13)
+        print("")
+
+
+
+
+
 #Variavel utilizada salvar o estado de tentativa de resolução, ajudando na criação das fórmulas
 
 '''
