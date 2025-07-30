@@ -45,9 +45,14 @@ def regras_de_estado(solver, passo):
                     proposicao1 = get_proposicao(passo, linha, coluna, valor1)
                     proposicao2 = get_proposicao(passo, linha, coluna, valor2)
                     solver.add_clause([-proposicao1, -proposicao2])
-            for valor in range(9):
-                clausula = [get_proposicao(passo, linha, coluna, valor) for linha in range(3) for coluna in range(3)]
-                solver.add_clause(clausula)
+
+    for valor in range(9):
+        clausula = []
+        for linha in range(3):
+            for coluna in range(3):
+                proposicao = get_proposicao(passo, linha, coluna, valor)
+                clausula.append(proposicao)
+        solver.add_clause(clausula)
 
 def regras_de_acao(solver, passo):
     acoes = ['U','D','L','R']
@@ -106,9 +111,9 @@ def exibir_solucao(modelo, passos_solucao):
     for passo in range(passos_solucao + 1):
         print(f"\npasso: {passo}")
         if passo < passos_solucao:
-            for i in solucao:
-                if i.startswith(f"{passo}_A_"):
-                    acao = i.split("_")[-1]
+            for s in solucao:
+                if s.startswith(f"{passo}_A_"):
+                    acao = s.split("_")[-1]
                     nome_acao = {'U': 'Cima', 'D': 'Baixo', 'L': 'Esquerda', 'R': 'Direita'}
                     print(f"Açao: mover o '0' para {nome_acao.get(acao, acao)}")
                     break
@@ -130,9 +135,9 @@ if __name__ == "__main__":
     passos_maximos = 20
 
     puzzle_inicial = [
-        [3,2,1],
-        [4,6,5],
-        [8,7,0]
+        [1,4,7],
+        [2,5,0],
+        [3,6,8]
     ]
     print("estado inicial do puzzle")
     mostrar_puzzle(puzzle_inicial)
