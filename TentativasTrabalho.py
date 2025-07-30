@@ -1,5 +1,5 @@
 from pysat.solvers import Glucose3
-
+from itertools import combinations
 
 '''
 Teste do solver da video aula do thiago
@@ -9,13 +9,30 @@ g.add_clause([-2, 3])
 print(g.solve())
 print(g.get_model())'''
 
-puzzle = []
+#variais globais
 proposicoes = {}
+valor_proposicao_inicial = 1
+estado_final = [[1, 2 ,3],[4 ,5 ,6],[7, 8, 0]]
 
-passo = 1
+
+def get_proposicao(passo, linha, coluna, valor):
+    global valor_proposicao_inicial
+    aux = str(passo) + "_P_" + str(linha) + "_" + str(coluna) + "_" + str(valor)
+    if aux in proposicoes:
+        proposicoes[aux] = valor_proposicao_inicial
+        valor_proposicao_inicial += 1
+    return proposicoes[aux]
+
+def get_acao(passo, acao):
+    global valor_proposicao_inicial
+    aux = str(passo) + "_A_" + str(acao)
+    if aux in proposicoes:
+        proposicoes[aux] = valor_proposicao_inicial
+        valor_proposicao_inicial += 1
+        return proposicoes[aux]
 #Variavel utilizada salvar o estado de tentativa de resolução, ajudando na criação das fórmulas
 
-
+'''
 valor_peca = 1
 # laço para criar as proposições com o 8-puzzle resolvido
 for l in range(1,4):
@@ -52,7 +69,7 @@ def mostrar_puzzle():
 
 mostrar_puzzle()
 
-'''
+
 Anotações sobre o solver
 g = Glucose3() # Instanciando o solver, g é o solver
 g.add_clause([-1, 2]) # Aqui é uma clausola e ela é do estilo das clausolas da sala de aula (p V q V -n)
