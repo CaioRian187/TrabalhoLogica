@@ -1,15 +1,19 @@
+# Caio Rian Pereira dos santos - 558149
+# Francisco Honycleytton Rebouças Sena - 501071
+
 from pysat.solvers import Glucose3
 from itertools import combinations
 import random
 
-# Variáveis globais
+# Criando as variáveis globais
 proposicoes = {}
 valor_proposicao_inicial = 1
 estado_final = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
 
 
 def get_proposicao(passo, linha, coluna, valor):
-    """Mapeia proposições para variáveis inteiras únicas"""
+    # Criando proposições com valores únicos, cada proposição tem seu valor unico
+
     global valor_proposicao_inicial
     aux = f"{passo}_P_{linha}_{coluna}_{valor}"
     if aux not in proposicoes:
@@ -19,7 +23,8 @@ def get_proposicao(passo, linha, coluna, valor):
 
 
 def get_acao(passo, acao):
-    """Mapeia ações para variáveis inteiras únicas"""
+    # Criando as ações que seram realizadas para resolver o puzzle
+
     global valor_proposicao_inicial
     aux = f"{passo}_A_{acao}"
     if aux not in proposicoes:
@@ -29,7 +34,8 @@ def get_acao(passo, acao):
 
 
 def mostrar_puzzle(puzzle, titulo=""):
-    """Exibe o puzzle de forma visual"""
+    # Mostrando o puzzle
+
     if titulo:
         print(f"\n{titulo}")
     print("+" + "---+" * 3)
@@ -41,7 +47,8 @@ def mostrar_puzzle(puzzle, titulo=""):
 
 
 def gerar_estado_inicial(passos=20):
-    """Gera um estado inicial válido a partir do estado final"""
+    # Gerando um estado inicial que seja valido e tenha resolução a partir do estado final
+
     estado = [linha[:] for linha in estado_final]
     vazio_linha, vazio_coluna = 0, 0
 
@@ -67,8 +74,9 @@ def gerar_estado_inicial(passos=20):
     return estado
 
 
-def eh_soluvel(puzzle):
-    """Verifica se o puzzle tem solução"""
+def verificacao_soluvel(puzzle):
+    # Basicamente verifica se o puzzle tem solução para que seja resolvido
+
     lista = [puzzle[i][j] for i in range(3) for j in range(3) if puzzle[i][j] != 0]
     inversoes = 0
 
@@ -81,10 +89,11 @@ def eh_soluvel(puzzle):
 
 
 def regras_de_estado(solver, passo):
-    """Adiciona regras sobre a configuração do tabuleiro"""
+    # Adicionando as regras no solver que seram seguidas para a resolução do puzzle
+
     for linha in range(3):
         for coluna in range(3):
-            # Cada célula deve conter exatamente um valor
+            # Cada célula tem que conter somente um valor
             clausula = [get_proposicao(passo, linha, coluna, valor) for valor in range(9)]
             solver.add_clause(clausula)
 
@@ -105,20 +114,22 @@ def regras_de_estado(solver, passo):
 
 
 def regras_de_acao(solver, passo):
-    """Define regras sobre as ações possíveis"""
+    # Adicionando no solver as regras que seram usadas como ação para resolver o solver (cima,baixo,esquerda,direita)
+
     acoes = ['U', 'D', 'L', 'R']
     vars_acao = [get_acao(passo, acao) for acao in acoes]
 
     # Pelo menos uma ação deve ser selecionada
     solver.add_clause(vars_acao)
 
-    # No máximo uma ação por passo
+    # No máximo uma ação por cada passo
     for a1, a2 in combinations(vars_acao, 2):
         solver.add_clause([-a1, -a2])
 
 
 def regras_de_transicao(solver, passo):
-    """Define como o tabuleiro muda entre passos"""
+    # Define como o puzzle muda entre os passos executados
+
     movimentos = {
         'U': (-1, 0),  # Cima
         'D': (1, 0),  # Baixo
@@ -170,7 +181,8 @@ def regras_de_transicao(solver, passo):
 
 
 def exibir_solucao(modelo, passos_solucao):
-    """Mostra a solução passo a passo"""
+    # Mostrando o passo a passo da solução do puzzle
+
     if not modelo:
         print("Nenhuma solução encontrada")
         return
@@ -202,7 +214,8 @@ def exibir_solucao(modelo, passos_solucao):
 
 
 def resolver_puzzle(puzzle_inicial, max_passos=2000):
-    """Encontra a solução com o menor número de passos"""
+    # Encontrando a solução com a menor número de passos para a resolução do puzzle
+
     for passos in range(1, max_passos + 1):
         solver = Glucose3()
         proposicoes.clear()
@@ -239,9 +252,9 @@ def resolver_puzzle(puzzle_inicial, max_passos=2000):
 
 
 def main():
-    """Função principal"""
     # Gera um estado inicial válido ou usa o fornecido
-    usar_exemplo = input("Usar puzzle de exemplo? (s/n): ").lower() == 's'
+
+    usar_exemplo = input("Deseja usar o puzzle de exemplo que está no documento? (s/n): ").lower() == 's'
 
     if usar_exemplo:
         puzzle = [
@@ -252,7 +265,7 @@ def main():
     else:
         while True:
             puzzle = gerar_estado_inicial(random.randint(15, 25))
-            if eh_soluvel(puzzle):
+            if verificacao_soluvel(puzzle):
                 break
 
     print("\nEstado Inicial:")
